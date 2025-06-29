@@ -66,8 +66,8 @@ char ssid[] = "optix_legacy";  // your open 2.4 GHz network
 
 ## Screenshots & Demo Video
 
-1. **Screenshot 1:** NodeMCU serial output upon Wi-Fi and Blynk connection(Screenshot_20250629_134754_Blynk IoT.jpg)
-2. **Screenshot 2:** Blynk dashboard with Switch (V0), Value Display (V1), and Gauge (V2)(Screenshot_20250629_134754_Blynk IoT.jpg)
+1. **Screenshot 1:** NodeMCU serial output upon Wi-Fi and Blynk connection(Screenshot_20250629_134754_Blynk_IoT.jpg)
+2. **Screenshot 2:** Blynk dashboard with Switch (V0), Value Display (V1), and Gauge (V2)(Screenshot_20250629_134754_Blynk_IoT.jpg)
 3. **Demo Video:** [**Watch the demo on YouTube**](https://www.youtube.com/watch?v=Y2iu5TG_uY4).
 
 ## Troubleshooting
