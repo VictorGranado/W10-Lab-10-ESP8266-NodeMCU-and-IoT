@@ -70,7 +70,7 @@ char ssid[] = "optix_legacy";  // your open 2.4 GHz network
    ![Alt text]("Screenshot_20250629_134754_Blynk IoT.jpg")
 2. **Screenshot 2:** Blynk dashboard with Switch (V0), Value Display (V1), and Gauge (V2)
    ![Alt text](Screenshot_20250629_134754_Blynk IoT.jpg)
-3. **Demo Video:** [Watch the demo on YouTube]([https://www.youtube.com/your-video-link](https://www.youtube.com/watch?v=Y2iu5TG_uY4)).
+3. **Demo Video:** [**Watch the demo on YouTube**]([https://www.youtube.com/watch?v=Y2iu5TG_uY4]).
 
 ## Troubleshooting
 
