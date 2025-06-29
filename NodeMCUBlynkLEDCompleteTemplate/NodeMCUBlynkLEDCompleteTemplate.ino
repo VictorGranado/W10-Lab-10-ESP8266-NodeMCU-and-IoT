@@ -39,38 +39,46 @@
   Open Wi-Fi (no password) + full debug/logging
 *************************************************************/
 
-/* ——————————————————————————————— */
-/* 1) Must define these BEFORE any Blynk includes */
-#define BLYNK_PRINT    Serial      // Send Blynk debug to Serial
-#define BLYNK_DEBUG                   // More verbose debug
+/*************************************************************
+  Toggle LED (V0), Echo to V1, Send uptime to V2
+*************************************************************/
 
+/*************************************************************
+  Toggle LED (V0), Echo to V1, Send uptime to V2
+  — no external timer library, uses millis()
+*************************************************************/
+
+/* ——————————————————————————————— */
+/* 1) Blynk device info BEFORE any includes */
 #define BLYNK_TEMPLATE_ID    "TMPL2GbwvzWj0"
 #define BLYNK_TEMPLATE_NAME  "Quickstart Device"
 #define BLYNK_AUTH_TOKEN     "aHxweKLup53_ywwe70xJJ_sGfU4kvOK8"
 /* ——————————————————————————————— */
 
+#define BLYNK_PRINT Serial       // comment out to disable debug
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
-// Your open SSID (no pass)
-char ssid[] = "optix_legacy";
+char ssid[] = "optix_legacy";    // open 2.4 GHz network
+
+// track when we last sent uptime
+unsigned long lastUptimeMs = 0;
 
 BLYNK_WRITE(V0) {
   int v = param.asInt();  
-  // onboard LED is active-LOW
-  digitalWrite(LED_BUILTIN, v ? LOW : HIGH);
+  digitalWrite(LED_BUILTIN, v ? LOW : HIGH); // onboard LED is active-LOW
+  Blynk.virtualWrite(V1, v);                // echo to V1
 }
 
 void setup() {
   Serial.begin(115200);
   delay(100);
 
-  // Prep LED
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(LED_BUILTIN, HIGH);  // off at start
 
-  // 1) Wi-Fi join
-  Serial.printf("Connecting to Wi-Fi \"%s\"", ssid);
+  // 1) Join open Wi-Fi
+  Serial.printf("Connecting to \"%s\"…", ssid);
   WiFi.begin(ssid);
   uint8_t tries = 0;
   while (WiFi.status() != WL_CONNECTED && tries < 20) {
@@ -78,27 +86,33 @@ void setup() {
     delay(500);
     tries++;
   }
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("\n✅ Wi-Fi connected");
-    Serial.print("IP: ");
-    Serial.println(WiFi.localIP());
-  } else {
+  if (WiFi.status() != WL_CONNECTED) {
     Serial.println("\n❌ Wi-Fi FAILED");
-    // Optionally halt or reboot here
     return;
   }
+  Serial.println("\n✅ Wi-Fi connected");
+  Serial.print("IP: "); Serial.println(WiFi.localIP());
 
-  // 2) Blynk connect
+  // 2) Connect to Blynk.Cloud
   Blynk.config(BLYNK_AUTH_TOKEN, "blynk.cloud", 80);
-  Serial.println("Connecting to Blynk Cloud...");
+  Serial.println("Connecting to Blynk…");
   if (Blynk.connect()) {
     Serial.println("✅ Blynk connected!");
   } else {
-    Serial.println("❌ Blynk connection FAILED");
+    Serial.println("❌ Blynk FAILED");
+    return;
   }
 }
 
 void loop() {
   Blynk.run();
+
+  // every 1 s, send uptime to V2
+  unsigned long now = millis();
+  if (now - lastUptimeMs >= 1000) {
+    lastUptimeMs = now;
+    Blynk.virtualWrite(V2, now / 1000);
+  }
 }
+
 
